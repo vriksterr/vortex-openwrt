@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vortex
-PKG_VERSION:=2026.11.04
+PKG_VERSION:=2026.11.05
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -18,7 +18,7 @@ define Package/vortex
 	SECTION:=net
 	CATEGORY:=Network
 	SUBMENU:=VPN
-	DEPENDS:=+kmod-tun +libsodium +libpthread
+	DEPENDS:=+kmod-tun
 	TITLE:=Vortex multipath UDP tunnel
 	URL:=https://github.com/vriksterr/vortex
 endef
@@ -36,15 +36,13 @@ define Package/vortex/conffiles
 /etc/config/vortex
 endef
 
-# Use the target's libsodium instead of the bundled copy.
+# Builds the libsodium that ships in the vortex source and links it in
+# statically, so the package needs no libsodium package on the router.
 define Build/Compile
+	cd $(PKG_BUILD_DIR) && sh ./sodium.sh $(TARGET_CROSS)
 	$(MAKE) -C $(PKG_BUILD_DIR) vortex \
-		SODIUM=system \
-		CC="$(TARGET_CC)" \
-		CFLAGS="$(TARGET_CFLAGS) -std=gnu99 -pthread" \
-		CPPFLAGS="$(TARGET_CPPFLAGS)" \
-		LDFLAGS="$(TARGET_LDFLAGS)" \
-		LDLIBS="-lsodium -lpthread"
+		X="$(TARGET_CROSS)" \
+		CFLAGS="-std=gnu99 -O2 -Wall -fstack-protector-strong -pthread $(TARGET_CFLAGS)"
 endef
 
 define Package/vortex/install
