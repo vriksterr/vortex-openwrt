@@ -2,11 +2,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=vortex
 PKG_VERSION:=2026.11.05
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/vriksterr/vortex.git
-PKG_SOURCE_VERSION:=ff3c22149b7bda3438157708c9faccca94edd717
+PKG_SOURCE_VERSION:=ba339b6
 PKG_MIRROR_HASH:=skip
 
 PKG_LICENSE:=BSD-3-Clause
